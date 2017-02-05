@@ -1,15 +1,39 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The functions below allow you to set a matrix and solve for the inverse of the matrix. It appears that we are setting 
+## X outside of the enclosing environment? Which I believe allows cacheSolve to call it?
+## 
 
-## Write a short comment describing this function
+## makeCacheMatrix allows you to set x to a matrix and stores the matrix outside of teh enclosing environment
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  i <- NULL
+  set <- function(y) {
+    x <<- y
+    i <<- NULL
+  }
+  get <- function() x
+  seti <- function(inverse) i <<- inverse
+  geti <- function() i
+  list(set = set, get = get,
+       seti = seti,
+       geti = geti)
 }
 
 
-## Write a short comment describing this function
+## Solves for makeCacheMatrix returning the inverse of the matrix. If the matrix is not changed it should retrive it
+## from cache
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+ i <- x$geti()
+  
+  if(!is.null(i)) {
+    
+    message("getting cached data")
+    return(i)
+  
+  }
+  data <- x$get()
+  i <- solve(data, ...)
+  x$seti(i)
+  i
 }
+
